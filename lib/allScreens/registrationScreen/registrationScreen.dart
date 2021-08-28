@@ -9,7 +9,7 @@ import 'package:cruiser_driver/allWidgets/progressDialog.dart';
 import 'package:cruiser_driver/configs/sizeConfig.dart';
 import 'package:cruiser_driver/database/authMethods/register.dart';
 import 'package:cruiser_driver/models/userDataToMap.dart';
-import 'package:provider/provider.dart';
+
 
 import '../../main.dart';
 

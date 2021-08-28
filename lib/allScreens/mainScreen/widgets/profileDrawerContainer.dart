@@ -38,7 +38,7 @@ class ProfileDrawerContainer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        Provider.of<AppData>(context)
+                        Provider.of<AppData>(context,listen: false)
                             .currentUserInfo
                             .name!, //todo check if listen false is necessary?
                         style: TextStyle(

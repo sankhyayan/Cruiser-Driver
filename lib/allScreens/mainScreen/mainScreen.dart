@@ -4,6 +4,7 @@ import 'package:cruiser_driver/allScreens/mainScreen/tabPages/profileTabPage.dar
 import 'package:cruiser_driver/allScreens/mainScreen/tabPages/ratingTabPage.dart';
 import 'package:cruiser_driver/allScreens/mainScreen/widgets/driverOnlineOffline.dart';
 import 'package:cruiser_driver/configs/DriverLocationOnlineMethods/getLiveLocationUpdates.dart';
+import 'package:cruiser_driver/configs/notifications/pushNotificationService.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
 import 'package:cruiser_driver/configs/sizeConfig.dart';
 import 'package:cruiser_driver/database/authMethods/CurrentUser.dart';
@@ -27,6 +28,8 @@ class _MainScreenState extends State<MainScreen>
     super.initState();
     tabController = TabController(length: 4, vsync: this);
     CurrentUser.getCurrentUserInfo(context);
+    PushNotificationService.setupInteractedMessage(context);
+    PushNotificationService.getToken(context);
   }
 
   ///dispose method

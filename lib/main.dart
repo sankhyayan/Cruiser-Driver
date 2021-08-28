@@ -2,16 +2,22 @@ import 'package:cruiser_driver/allScreens/carInfoScreen/carInfoScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cruiser_driver/allScreens/loginScreen/loginScreen.dart';
 import 'package:cruiser_driver/allScreens/mainScreen/mainScreen.dart';
 import 'package:cruiser_driver/allScreens/registrationScreen/registrationScreen.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
-
+Future<void> backgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print(message.data.toString());
+  print(message.notification!.title);
+}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
   runApp(UberClone());
 }
 

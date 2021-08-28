@@ -11,7 +11,6 @@ import 'package:cruiser_driver/allWidgets/progressDialog.dart';
 import 'package:cruiser_driver/configs/sizeConfig.dart';
 import 'package:cruiser_driver/database/authMethods/login.dart';
 import 'package:cruiser_driver/main.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String idScreen = "loginScreen";
