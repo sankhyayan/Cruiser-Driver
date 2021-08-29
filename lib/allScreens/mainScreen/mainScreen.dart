@@ -4,7 +4,8 @@ import 'package:cruiser_driver/allScreens/mainScreen/tabPages/profileTabPage.dar
 import 'package:cruiser_driver/allScreens/mainScreen/tabPages/ratingTabPage.dart';
 import 'package:cruiser_driver/allScreens/mainScreen/widgets/driverOnlineOffline.dart';
 import 'package:cruiser_driver/configs/DriverLocationOnlineMethods/getLiveLocationUpdates.dart';
-import 'package:cruiser_driver/configs/notifications/pushNotificationService.dart';
+import 'package:cruiser_driver/configs/notifications/FCMpushNotificationService.dart';
+import 'package:cruiser_driver/configs/notifications/local_notification_service.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
 import 'package:cruiser_driver/configs/sizeConfig.dart';
 import 'package:cruiser_driver/database/authMethods/CurrentUser.dart';
@@ -28,6 +29,8 @@ class _MainScreenState extends State<MainScreen>
     super.initState();
     tabController = TabController(length: 4, vsync: this);
     CurrentUser.getCurrentUserInfo(context);
+    ///initializing notification services
+    LocalNotificationService.initialize(context);
     PushNotificationService.setupInteractedMessage(context);
     PushNotificationService.getToken(context);
   }
@@ -100,3 +103,4 @@ class _MainScreenState extends State<MainScreen>
     );
   }
 }
+// This is the token:: fnL86Eo3ReSh1wjaYriyLq:APA91bFkmQD6-AF5TalP2iNk96ACw9ZX-gUIVbzHvzv-XkTBjB547JS9tzgyjxncTUAofqE5YtAve07h0uMFVn9TvVc4l6_LuzD-Ai_QuVd8LQaoS5NcggA3DWH9-yKvOKnPDuL_XBQb

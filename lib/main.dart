@@ -1,31 +1,59 @@
 import 'package:cruiser_driver/allScreens/carInfoScreen/carInfoScreen.dart';
+import 'package:cruiser_driver/configs/notifications/local_notification_service.dart';
+import 'package:cruiser_driver/configs/rideDetails/rideRequestDetails.dart';
+import 'package:cruiser_driver/configs/rideDetails/rideRequestId.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:cruiser_driver/allScreens/loginScreen/loginScreen.dart';
 import 'package:cruiser_driver/allScreens/mainScreen/mainScreen.dart';
 import 'package:cruiser_driver/allScreens/registrationScreen/registrationScreen.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
+
+///background [OPENED and TERMINATED] app state notification data handler
 Future<void> backgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print(message.data.toString());
-  print(message.notification!.title);
+  RideRequestDetails.retrieveRideDetails(
+      RideRequestId.getRideRequestId(message));
 }
+
+///creating global state isolate notification channel[top-level]
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  "high_importance_channel", //channel ID
+  "High Importance Notifications", //channel NAME
+  "This channel is used fore important notifications", //channel DESCRIPTION
+  importance: Importance.high,
+);
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
+  ///clearing default notification channel and setting my custom notification channel
+  await LocalNotificationService.notificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
   runApp(UberClone());
 }
 
+///driver's db reference
 final DatabaseReference driversRef = FirebaseDatabase(
         databaseURL:
             "https://uber-clone-64d20-default-rtdb.asia-southeast1.firebasedatabase.app")
     .reference()
     .child("Drivers");
+
+///new ride request's db reference
+final DatabaseReference newRideRequestRef = FirebaseDatabase(
+        databaseURL:
+            "https://uber-clone-64d20-default-rtdb.asia-southeast1.firebasedatabase.app")
+    .reference()
+    .child("Ride Requests");
 
 class UberClone extends StatelessWidget {
   @override

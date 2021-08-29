@@ -1,4 +1,7 @@
+import 'package:cruiser_driver/configs/notifications/local_notification_service.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
+import 'package:cruiser_driver/configs/rideDetails/rideRequestDetails.dart';
+import 'package:cruiser_driver/configs/rideDetails/rideRequestId.dart';
 import 'package:cruiser_driver/main.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,15 +9,16 @@ import 'package:provider/provider.dart';
 
 class PushNotificationService {
   static Future<void> setupInteractedMessage(BuildContext context) async {
+    ///foreground app state notification handler
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("Title: ${message.notification!.title}");//displaying foreground notification data
-      print("Body: ${message.notification!.body}");
+      LocalNotificationService.display(message);
+      RideRequestDetails.retrieveRideDetails(RideRequestId.getRideRequestId(message));
     });
-
+    ///terminated app state notification handler
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
     _handleMessage(initialMessage, context);
-
+    ///background app state notification handler
     FirebaseMessaging.onMessageOpenedApp
         .listen((RemoteMessage message) => _handleMessage(message, context));
   }
@@ -35,10 +39,12 @@ class PushNotificationService {
         .child(Provider.of<AppData>(context, listen: false).currentUserInfo.id!)
         .child("token")
         .set(token);
+
     ///subscription topic names are CASE sensitive.
     ///Once subscribed to a topic a user CANNOT un-subscribe from it until he/she uninstalls the app or the developer un-subscribes in some way.
     ///topic subscription must always be initialized at start
     await FirebaseMessaging.instance.subscribeToTopic("allDrivers");
     await FirebaseMessaging.instance.subscribeToTopic("allUsers");
   }
+
 }
