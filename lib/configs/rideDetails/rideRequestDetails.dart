@@ -1,12 +1,17 @@
+import 'package:cruiser_driver/allWidgets/notificationDetailsDialog.dart';
+import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
 import 'package:cruiser_driver/main.dart';
 import 'package:cruiser_driver/models/rideDetails.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class RideRequestDetails {
   ///getting ride details with ride ID
-  static void retrieveRideDetails(String rideRequestId) {
-    newRideRequestRef
+  static Future<void> retrieveRideDetails(
+      String rideRequestId, BuildContext context) async {
+    await newRideRequestRef
         .child(rideRequestId)
         .once()
         .then((DataSnapshot dataSnapshot) {
@@ -36,6 +41,17 @@ class RideRequestDetails {
         rideDetails.pickUp = LatLng(pickUpLocationLat, pickUpLocationLng);
         rideDetails.dropOff = LatLng(dropOffLocationLat, dropOffLocationLng);
         rideDetails.payment_method = paymentMethod;
+
+        ///updating ride details in provider
+        Provider.of<AppData>(context, listen: false)
+            .updateRideDetails(rideDetails);
+
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) => NotificationDialog(
+                rideDetails: Provider.of<AppData>(context)
+                    .newRideRequestDetails));
       }
     });
   }

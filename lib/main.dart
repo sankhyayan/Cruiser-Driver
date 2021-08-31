@@ -1,7 +1,6 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cruiser_driver/allScreens/carInfoScreen/carInfoScreen.dart';
 import 'package:cruiser_driver/configs/notifications/local_notification_service.dart';
-import 'package:cruiser_driver/configs/rideDetails/rideRequestDetails.dart';
-import 'package:cruiser_driver/configs/rideDetails/rideRequestId.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -14,11 +13,16 @@ import 'package:cruiser_driver/allScreens/mainScreen/mainScreen.dart';
 import 'package:cruiser_driver/allScreens/registrationScreen/registrationScreen.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
 
+import 'configs/notifications/notificationSound.dart';
+
+///initializing assets audio player
+final assetsAudioPlayer = AssetsAudioPlayer();
+
 ///background [OPENED and TERMINATED] app state notification data handler
 Future<void> backgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  RideRequestDetails.retrieveRideDetails(
-      RideRequestId.getRideRequestId(message));
+  await NotificationSound.notificationSound();//todo:1)when app in bg no alert ring happens
+                                              //todo:2)when app terminated alert ring happens BUT on cancel ride request ring doesn't stop
 }
 
 ///creating global state isolate notification channel[top-level]
@@ -28,6 +32,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   "This channel is used fore important notifications", //channel DESCRIPTION
   importance: Importance.high,
 );
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -53,7 +58,8 @@ final DatabaseReference newRideRequestRef = FirebaseDatabase(
         databaseURL:
             "https://uber-clone-64d20-default-rtdb.asia-southeast1.firebasedatabase.app")
     .reference()
-    .child("Ride Requests");
+    .child("Ride Requests").reference();
+
 
 class UberClone extends StatelessWidget {
   @override

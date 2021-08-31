@@ -26,6 +26,7 @@ dependencies:
   flutter_geofire: ^2.0.0
   firebase_messaging: ^10.0.6
   flutter_local_notifications: ^8.1.1+1
+  assets_audio_player: ^3.0.3+6
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +37,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/sounds/
 
   fonts:
     - family: Signatra

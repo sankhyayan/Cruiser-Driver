@@ -1,10 +1,14 @@
 import 'dart:async';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
+import 'package:cruiser_driver/main.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+
+
 
 class LiveLocationUpdates {
   static late StreamSubscription<Position> homeTabPageSubscription;
@@ -15,6 +19,7 @@ class LiveLocationUpdates {
           Provider.of<AppData>(context, listen: false).currentUserInfo.id!,
           position.latitude,
           position.longitude);
+
       ///creating latLng variable for live position
       LatLng latLng = LatLng(position.latitude, position.longitude);
 
@@ -23,8 +28,17 @@ class LiveLocationUpdates {
     });
   }
 
-  static Future<void> liveLocationDispose(BuildContext context) async{
+  ///driver offline setter
+  static Future<void> liveLocationDispose(BuildContext context) async {
     Provider.of<AppData>(context, listen: false).clearAnimateMap();
+
+    ///firebase reference for driver's state
+    final DatabaseReference driverStateRef = driversRef
+        .child(Provider.of<AppData>(context, listen: false).currentUserInfo.id!)
+        .child("driverState");
+
+    ///setting driver state OFFLINE in DB
+    await driverStateRef.set("offline");
     await homeTabPageSubscription.cancel();
     await Geofire.stopListener();
     await Geofire.removeLocation(

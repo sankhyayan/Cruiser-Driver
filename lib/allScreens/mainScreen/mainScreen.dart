@@ -3,8 +3,10 @@ import 'package:cruiser_driver/allScreens/mainScreen/tabPages/homeTabPage.dart';
 import 'package:cruiser_driver/allScreens/mainScreen/tabPages/profileTabPage.dart';
 import 'package:cruiser_driver/allScreens/mainScreen/tabPages/ratingTabPage.dart';
 import 'package:cruiser_driver/allScreens/mainScreen/widgets/driverOnlineOffline.dart';
-import 'package:cruiser_driver/configs/DriverLocationOnlineMethods/getLiveLocationUpdates.dart';
+import 'package:cruiser_driver/configs/DriverLocationAndOnlineMethods/getLiveLocationUpdates.dart';
+
 import 'package:cruiser_driver/configs/notifications/FCMpushNotificationService.dart';
+import 'package:cruiser_driver/configs/notifications/fcmTokenGetter.dart';
 import 'package:cruiser_driver/configs/notifications/local_notification_service.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
 import 'package:cruiser_driver/configs/sizeConfig.dart';
@@ -28,11 +30,14 @@ class _MainScreenState extends State<MainScreen>
   void initState() {
     super.initState();
     tabController = TabController(length: 4, vsync: this);
+
+    ///driver details initializer
     CurrentUser.getCurrentUserInfo(context);
+    FcmTokenGetter.getToken(context);//todo try initializing somewhere else
+
     ///initializing notification services
     LocalNotificationService.initialize(context);
     PushNotificationService.setupInteractedMessage(context);
-    PushNotificationService.getToken(context);
   }
 
   ///dispose method

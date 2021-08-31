@@ -1,3 +1,4 @@
+import 'package:cruiser_driver/models/rideDetails.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cruiser_driver/database/RideRequestMethods/cancelRideRequest.dart';
@@ -12,26 +13,33 @@ class AppData extends ChangeNotifier {
   Set<Circle> mapCircles = {};
   Set<Polyline> polylineSet = {};
   int tabIndex = 0;
-  bool isDriverOnline=false;
-  bool googleMapUpdated=false;
+  bool isDriverOnline = false;
+  bool googleMapUpdated = false;
+  RideDetails newRideRequestDetails = RideDetails();
   UserDataFromSnapshot currentUserInfo =
       UserDataFromSnapshot(id: "", email: "", name: "", phone: "");
   DirectionDetails directionDetails = DirectionDetails(
       durationValue: 0, distanceValue: 0, distanceText: "", durationText: "");
   bool animateMap = false;
+  bool animateNewRideMap=false;
   String response = "";
   bool rideRequest = false;
   LatLngBounds latLngBounds =
       LatLngBounds(southwest: LatLng(0.0, 0.0), northeast: LatLng(0.0, 0.0));
-  LatLng latLng = LatLng(0,0);
+  LatLng latLng = LatLng(0, 0);
 
   void updatePickupLocation(Address _pickupAddress) {
     pickupLocation = _pickupAddress;
     notifyListeners();
   }
 
-  void updateGoogleMapControllerInitialization(){
-    googleMapUpdated=true;
+  void updateRideDetails(RideDetails _rideDetails) {
+    newRideRequestDetails = _rideDetails;
+    notifyListeners();
+  }
+
+  void updateGoogleMapControllerInitialization() {
+    googleMapUpdated = true;
     notifyListeners();
   }
 
@@ -40,8 +48,8 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateDriverOnline(){
-    isDriverOnline=true;
+  void updateDriverOnline() {
+    isDriverOnline = true;
     notifyListeners();
   }
 
@@ -80,6 +88,11 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void animateNewRideGoogleCamera() {
+    animateNewRideMap = true;
+    notifyListeners();
+  }
+
   void animateGoogleCamera() {
     animateMap = true;
     notifyListeners();
@@ -115,6 +128,11 @@ class AppData extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearNewRideAnimateMap() {
+    animateNewRideMap = false;
+    notifyListeners();
+  }
+
   void clearAnimateMap() {
     animateMap = false;
     notifyListeners();
@@ -125,13 +143,14 @@ class AppData extends ChangeNotifier {
     rideRequest = false;
     notifyListeners();
   }
-  void clearGoogleMapControllerInitialization(){
-    googleMapUpdated=false;
+
+  void clearGoogleMapControllerInitialization() {
+    googleMapUpdated = false;
     notifyListeners();
   }
 
-  void clearDriverOnline(){
-    isDriverOnline=false;
+  void clearDriverOnline() {
+    isDriverOnline = false;
     notifyListeners();
   }
 }

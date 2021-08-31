@@ -1,6 +1,6 @@
 import 'package:cruiser_driver/SnackBars/errorSnackBars.dart';
-import 'package:cruiser_driver/configs/DriverLocationOnlineMethods/getLiveLocationUpdates.dart';
-import 'package:cruiser_driver/configs/DriverLocationOnlineMethods/makeDriverOnlineNow.dart';
+import 'package:cruiser_driver/configs/DriverLocationAndOnlineMethods/getLiveLocationUpdates.dart';
+import 'package:cruiser_driver/configs/DriverLocationAndOnlineMethods/makeDriverOnlineNow.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

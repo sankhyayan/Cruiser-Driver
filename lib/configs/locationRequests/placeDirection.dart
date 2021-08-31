@@ -10,24 +10,22 @@ import 'package:cruiser_driver/models/directionDetails.dart';
 
 class PlaceDirection {
   static Future<void> getPlaceDirection(
-      BuildContext context, double defaultSize) async {
+      BuildContext context,
+      double defaultSize,
+      LatLng _pickupLocation,
+      LatLng _dropOffLocation) async {
+
     ///required values
     List<LatLng> _pLineCoordinates = [];
     Set<Polyline> _polylineSet = {};
     Set<Marker> _mapMarkers = {};
     Set<Circle> _mapCircles = {};
 
-    ///getting location details
-    var _pickupLocation =
-        Provider.of<AppData>(context, listen: false).pickupLocation;
-    var _dropOffLocation =
-        Provider.of<AppData>(context, listen: false).dropOffLocation;
-
     ///segregating location details
     var _pickupLatLng =
-        LatLng(_pickupLocation.latitude!, _pickupLocation.longitude!);
+        LatLng(_pickupLocation.latitude, _pickupLocation.longitude);
     var _dropOffLatLng =
-        LatLng(_dropOffLocation.latitude!, _dropOffLocation.longitude!);
+        LatLng(_dropOffLocation.latitude, _dropOffLocation.longitude);
 
     ///progress dialog bar
     showDialog(
@@ -94,22 +92,25 @@ class PlaceDirection {
     Provider.of<AppData>(context, listen: false)
         .updateLatLngBounds(latLngBounds);
 
-    ///updating animate checker in provider
-    Provider.of<AppData>(context, listen: false).animateGoogleCamera();
-
     ///creating pick and drop markers
     Marker _pickupMarker = Marker(
       markerId: MarkerId("pickupID"),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-      infoWindow:
-          InfoWindow(title: _pickupLocation.placeName, snippet: "My Location"),
+      infoWindow: InfoWindow(
+          title: Provider.of<AppData>(context, listen: false)
+              .newRideRequestDetails
+              .pickup_address,
+          snippet: "My Location"),
       position: _pickupLatLng,
     );
     Marker _dropOffMarker = Marker(
       markerId: MarkerId("dropOffID"),
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
       infoWindow: InfoWindow(
-          title: _dropOffLocation.placeName, snippet: "Drop Location"),
+          title: Provider.of<AppData>(context, listen: false)
+              .newRideRequestDetails
+              .drop_off,
+          snippet: "Drop Location"),
       position: _dropOffLatLng,
     );
 

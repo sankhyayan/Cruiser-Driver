@@ -1,5 +1,6 @@
 import 'package:cruiser_driver/configs/locationRequests/userGeoLocator.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
+import 'package:cruiser_driver/main.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
@@ -9,14 +10,10 @@ import 'package:provider/provider.dart';
 
 class MakeDriverOnlineNow {
   static Future<void> makeDriverOnlineNow(BuildContext context) async {
-    ///firebase reference todo:not necessary here maybe?see later
-    final DatabaseReference rideRequestRef = FirebaseDatabase(
-            databaseURL:
-                "https://uber-clone-64d20-default-rtdb.asia-southeast1.firebasedatabase.app")
-        .reference()
-        .child("Drivers")
+    ///firebase reference for driver's state
+    final DatabaseReference driverStateRef = driversRef
         .child(Provider.of<AppData>(context, listen: false).currentUserInfo.id!)
-        .child("newRideRequest");
+        .child("driverState");
 
     ///getting current position
     Position currentPosition = await UserGeoLocation.locatePosition();
@@ -28,6 +25,9 @@ class MakeDriverOnlineNow {
       currentPosition.latitude,
       currentPosition.longitude,
     );
+
+    ///setting driver state ONLINE in DB
+    await driverStateRef.set("searching");
 
     ///creating latLng variable for live position
     LatLng latLng = LatLng(currentPosition.latitude, currentPosition.longitude);

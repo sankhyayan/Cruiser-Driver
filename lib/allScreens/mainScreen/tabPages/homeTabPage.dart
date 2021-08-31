@@ -12,6 +12,7 @@ class HomeTabPage extends StatefulWidget {
 }
 
 class _HomeTabPageState extends State<HomeTabPage> {
+  ///future handler completer
   final Completer<GoogleMapController> _controllerGoogleMap = Completer();
 
   ///initial camera
@@ -35,26 +36,24 @@ class _HomeTabPageState extends State<HomeTabPage> {
       body: Stack(
         children: [
           ///google map container
-          Container(
-            child: GoogleMap(
-              initialCameraPosition: _initialCameraPos,
-              mapType: MapType.normal,
-              myLocationButtonEnabled: true,
-              myLocationEnabled: true,
-              onMapCreated: (GoogleMapController controller) async {
-                _controllerGoogleMap.complete(controller);
-                newGoogleMapController = controller;
+          GoogleMap(
+            initialCameraPosition: _initialCameraPos,
+            mapType: MapType.normal,
+            myLocationButtonEnabled: true,
+            myLocationEnabled: true,
+            onMapCreated: (GoogleMapController controller) async {
+              _controllerGoogleMap.complete(controller);
+              newGoogleMapController = controller;
 
-                ///updating googleMapControllerProvider
-                Provider.of<AppData>(context, listen: false)
-                    .updateGoogleMapControllerInitialization();
+              ///camera update position to current position on start
+              await newGoogleMapController.animateCamera(
+                  CameraUpdate.newCameraPosition(
+                      await UserGeoLocation.getCamPosition()));
 
-                ///camera update position to current position on start
-                await newGoogleMapController.animateCamera(
-                    CameraUpdate.newCameraPosition(
-                        await UserGeoLocation.getCamPosition()));
-              },
-            ),
+              ///updating googleMapControllerProvider
+              Provider.of<AppData>(context, listen: false)
+                  .updateGoogleMapControllerInitialization();
+            },
           ),
         ],
       ),

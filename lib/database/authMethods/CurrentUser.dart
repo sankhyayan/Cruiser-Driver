@@ -10,10 +10,9 @@ class CurrentUser {
   static Future<void> getCurrentUserInfo(BuildContext context) async {
     User firebaseUser = FirebaseAuth.instance.currentUser!;
     String userId = firebaseUser.uid;
-    DatabaseReference currentUserReference =
-        driversRef.child(userId);
-    await currentUserReference.once().then((DataSnapshot _dataSnapshot) {
-      if (_dataSnapshot.value != null) {
+    DatabaseReference currentUserReference = driversRef.child(userId);
+    await currentUserReference.once().then((DataSnapshot _dataSnapshot) async {
+      if (await _dataSnapshot.value != null) {
         UserDataFromSnapshot userCurrentInfo =
             UserDataFromSnapshot.fromSnapshot(_dataSnapshot);
         Provider.of<AppData>(context, listen: false)
