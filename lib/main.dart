@@ -1,5 +1,6 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:cruiser_driver/allScreens/carInfoScreen/carInfoScreen.dart';
+import 'package:cruiser_driver/allScreens/newRideScreen/rideAcceptedScreen.dart';
 import 'package:cruiser_driver/configs/notifications/local_notification_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,8 +22,8 @@ final assetsAudioPlayer = AssetsAudioPlayer();
 ///background [OPENED and TERMINATED] app state notification data handler
 Future<void> backgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  await NotificationSound.notificationSound();//todo:1)when app in bg no alert ring happens
-                                              //todo:2)when app terminated alert ring happens BUT on cancel ride request ring doesn't stop
+  await NotificationSound.notificationSound();//todo:1)when app in bg no alert ring happens AND no pop up shows on app open
+                                              //todo:2)when app terminated alert ring happens BUT no pop up shows on app open
 }
 
 ///creating global state isolate notification channel[top-level]
@@ -58,7 +59,7 @@ final DatabaseReference newRideRequestRef = FirebaseDatabase(
         databaseURL:
             "https://uber-clone-64d20-default-rtdb.asia-southeast1.firebasedatabase.app")
     .reference()
-    .child("Ride Requests").reference();
+    .child("Ride Requests");
 
 
 class UberClone extends StatelessWidget {
@@ -80,6 +81,7 @@ class UberClone extends StatelessWidget {
           LoginScreen.idScreen: (context) => LoginScreen(),
           MainScreen.idScreen: (context) => MainScreen(),
           CarInfoScreen.idScreen: (context) => CarInfoScreen(),
+          NewRideAcceptedScreen.idScreen:(context)=>NewRideAcceptedScreen(),
         },
       ),
     );

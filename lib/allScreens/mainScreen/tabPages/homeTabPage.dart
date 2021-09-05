@@ -27,7 +27,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
   @override
   Widget build(BuildContext context) {
     ///animate map check?
-    if (Provider.of<AppData>(context).animateMap &&
+    if (Provider.of<AppData>(context).isDriverOnline &&
         Provider.of<AppData>(context).googleMapUpdated) {
       newGoogleMapController.animateCamera(
           CameraUpdate.newLatLng(Provider.of<AppData>(context).latLng));

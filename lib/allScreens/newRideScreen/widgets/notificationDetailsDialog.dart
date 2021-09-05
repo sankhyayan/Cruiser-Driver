@@ -1,16 +1,17 @@
 import 'package:cruiser_driver/configs/DriverLocationAndOnlineMethods/checkDriverAvailability.dart';
+import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
 import 'package:cruiser_driver/configs/sizeConfig.dart';
 import 'package:cruiser_driver/main.dart';
 import 'package:cruiser_driver/models/rideDetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NotificationDialog extends StatelessWidget {
-  final RideDetails rideDetails;
-  NotificationDialog({required this.rideDetails});
-
   @override
   Widget build(BuildContext context) {
+    final RideDetails rideDetails =
+        Provider.of<AppData>(context).newRideRequestDetails;
     SizeConfig().init(context);
     final double defaultSize = SizeConfig.defaultSize;
     return Dialog(
@@ -50,13 +51,14 @@ class NotificationDialog extends StatelessWidget {
               height: defaultSize * 1.8,
             ),
             Text(
-              "New Ride Request",
+              rideDetails.rider_name!,
               style: TextStyle(
                   fontFamily: "Brand Bold", fontSize: defaultSize * 1.8),
             ),
             SizedBox(
               height: defaultSize * 3,
             ),
+
             ///pickup drop off locations
             Column(
               children: [
@@ -96,6 +98,7 @@ class NotificationDialog extends StatelessWidget {
                     height: defaultSize * 6,
                   ),
                 ),
+
                 ///drop off location
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -130,15 +133,19 @@ class NotificationDialog extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: defaultSize*2,),
+            SizedBox(
+              height: defaultSize * 2,
+            ),
+
             ///accept reject
             Column(
               children: [
                 ///accept
                 GestureDetector(
                   onTap: () async {
-                    Navigator.pop(context);
                     await assetsAudioPlayer.stop();
+                    Provider.of<AppData>(context, listen: false)
+                        .clearNewRideAnimateMap();
                     await CheckDriverAvailability.checkAvailability(
                         context, defaultSize);
                   },
@@ -155,7 +162,8 @@ class NotificationDialog extends StatelessWidget {
                       ],
                     ),
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: defaultSize*2),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: defaultSize * 2),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -174,19 +182,23 @@ class NotificationDialog extends StatelessWidget {
                     ),
                   ),
                 ),
+
                 ///reject
                 GestureDetector(
                   onTap: () async {
-                    Navigator.pop(context);
                     await assetsAudioPlayer.stop();
+                    Provider.of<AppData>(context, listen: false)
+                        .clearNewRideAnimateMap();
+                    Navigator.pop(context);
                   },
                   child: Container(
-                    height: defaultSize *6,
+                    height: defaultSize * 6,
                     decoration: BoxDecoration(
                       color: Colors.white,
                     ),
                     child: Padding(
-                      padding:EdgeInsets.symmetric(horizontal: defaultSize*2),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: defaultSize * 2),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

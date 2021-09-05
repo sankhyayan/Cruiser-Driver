@@ -1,4 +1,4 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cruiser_driver/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
@@ -7,11 +7,6 @@ import 'package:cruiser_driver/models/address.dart';
 ///using push so that the order is chronologically sorted
 
 class SaveRideRequest {
-  static final DatabaseReference rideRequestRef = FirebaseDatabase(
-          databaseURL:
-              "https://uber-clone-64d20-default-rtdb.asia-southeast1.firebasedatabase.app")
-      .reference()
-      .child("Ride Requests");
   static Future<void> saveRideRequest(BuildContext context) async {
     Address pickUp =
         Provider.of<AppData>(context, listen: false).pickupLocation;
@@ -32,15 +27,15 @@ class SaveRideRequest {
       "dropOff": dropOffLocationMap,
       "created_at": DateTime.now().toString(),
       "rider_name":
-          Provider.of<AppData>(context, listen: false).currentUserInfo.name,
+          Provider.of<AppData>(context, listen: false).currentDriverInfo.name,
       "rider_phone":
-          Provider.of<AppData>(context, listen: false).currentUserInfo.phone,
+          Provider.of<AppData>(context, listen: false).currentDriverInfo.phone,
       "pickup_address": pickUp.placeName,
       "drop_off": dropOff.placeName,
     };
 
-    await rideRequestRef
-        .child(Provider.of<AppData>(context, listen: false).currentUserInfo.id!)
+    await newRideRequestRef
+        .child(Provider.of<AppData>(context, listen: false).currentDriverInfo.id!)
         .set(rideInfoMap);
   }
 }

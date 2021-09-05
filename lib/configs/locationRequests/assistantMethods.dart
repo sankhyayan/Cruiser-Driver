@@ -3,6 +3,7 @@ import 'package:cruiser_driver/configs/locationRequests/requestAssistant.dart';
 import 'package:cruiser_driver/models/directionDetails.dart';
 
 class AssistantMethods {
+  ///Be mindful of exhausting daily free quota
   static Future<DirectionDetails?> obtainPlaceDirectionsDetails(
       LatLng pickupLocation, LatLng dropOffLocation) async {
     String directionUrl =

@@ -1,8 +1,9 @@
-import 'package:cruiser_driver/SnackBars/errorSnackBars.dart';
+
 import 'package:cruiser_driver/allScreens/mainScreen/mainScreen.dart';
-import 'package:cruiser_driver/allWidgets/progressDialog.dart';
+import 'package:cruiser_driver/uiMessageWidgets/progressDialog.dart';
 import 'package:cruiser_driver/configs/sizeConfig.dart';
 import 'package:cruiser_driver/database/carDetailsMethods/saveDriverInfo.dart';
+import 'package:cruiser_driver/uiMessageWidgets/errorSnackBars.dart';
 import 'package:flutter/material.dart';
 
 class CarInfoScreen extends StatelessWidget {
@@ -135,6 +136,7 @@ class CarInfoScreen extends StatelessWidget {
                         } else {
                           ///progress dialog indicator
                           showDialog(
+                            barrierDismissible: false,
                               context: context,
                               builder: (context) {
                                 return ProgressDialog(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:cruiser_driver/allWidgets/progressDialog.dart';
+import 'package:cruiser_driver/uiMessageWidgets/progressDialog.dart';
 import 'package:cruiser_driver/configs/locationRequests/addressDetails.dart';
 import 'package:cruiser_driver/models/placePredictions.dart';
 
@@ -15,6 +15,7 @@ class PredictionTile extends StatelessWidget {
       enableFeedback: false,
       onTap: () async {
         showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => ProgressDialog(
               defaultSize: defaultSize,

@@ -1,13 +1,14 @@
-import 'package:cruiser_driver/allScreens/carInfoScreen/carInfoScreen.dart';
+
 import 'package:cruiser_driver/allScreens/mainScreen/mainScreen.dart';
-import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
+
 import 'package:cruiser_driver/database/authMethods/CurrentUser.dart';
+import 'package:cruiser_driver/uiMessageWidgets/errorSnackBars.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:cruiser_driver/SnackBars/errorSnackBars.dart';
+
 import 'package:cruiser_driver/allScreens/registrationScreen/registrationScreen.dart';
-import 'package:cruiser_driver/allWidgets/progressDialog.dart';
+import 'package:cruiser_driver/uiMessageWidgets/progressDialog.dart';
 import 'package:cruiser_driver/configs/sizeConfig.dart';
 import 'package:cruiser_driver/database/authMethods/login.dart';
 import 'package:cruiser_driver/main.dart';
@@ -113,6 +114,7 @@ class LoginScreen extends StatelessWidget {
                       } else {
                         ///progress dialog indicator
                         showDialog(
+                          barrierDismissible: false,
                           context: context,
                           builder: (context) {
                             return ProgressDialog(

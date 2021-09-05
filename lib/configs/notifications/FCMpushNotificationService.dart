@@ -1,7 +1,7 @@
+import 'package:cruiser_driver/configs/newTripFunctions/rideDetails/rideRequestDetails.dart';
+import 'package:cruiser_driver/configs/newTripFunctions/rideDetails/rideRequestId.dart';
 import 'package:cruiser_driver/configs/notifications/local_notification_service.dart';
 import 'package:cruiser_driver/configs/notifications/notificationSound.dart';
-import 'package:cruiser_driver/configs/rideDetails/rideRequestDetails.dart';
-import 'package:cruiser_driver/configs/rideDetails/rideRequestId.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 

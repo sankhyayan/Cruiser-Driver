@@ -11,7 +11,7 @@ class FcmTokenGetter {
     print("This is the token:: $token");
     //todo:provider not providing current user here
     await driversRef
-        .child(Provider.of<AppData>(context, listen: false).currentUserInfo.id!)
+        .child(Provider.of<AppData>(context, listen: false).currentDriverInfo.id!)
         .child("token")
         .set(token);
 

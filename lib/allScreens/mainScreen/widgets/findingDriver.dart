@@ -41,7 +41,6 @@ class FindingDriver extends StatelessWidget {
               isRepeatingAnimation: true,
               repeatForever: true,
               onTap: () {
-                print("Tap Event");
               },
             ),
           ),

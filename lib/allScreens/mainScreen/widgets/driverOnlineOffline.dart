@@ -1,7 +1,9 @@
-import 'package:cruiser_driver/SnackBars/errorSnackBars.dart';
+
 import 'package:cruiser_driver/configs/DriverLocationAndOnlineMethods/getLiveLocationUpdates.dart';
 import 'package:cruiser_driver/configs/DriverLocationAndOnlineMethods/makeDriverOnlineNow.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
+import 'package:cruiser_driver/main.dart';
+import 'package:cruiser_driver/uiMessageWidgets/errorSnackBars.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,8 +28,8 @@ class DriverOnlineOffline extends StatelessWidget {
       ///setting driver online/offline
       onPressed: () async {
         if (!Provider.of<AppData>(context, listen: false).isDriverOnline) {
+
           ///setting driver online
-          Provider.of<AppData>(context, listen: false).updateDriverOnline();
           await MakeDriverOnlineNow.makeDriverOnlineNow(context);
           await LiveLocationUpdates.liveLocationUpdates(context);
           ErrorSnackBars.showFloatingSnackBar(
@@ -35,9 +37,15 @@ class DriverOnlineOffline extends StatelessWidget {
               defaultSize: defaultSize,
               errorText: "You are now Visible");
         } else {
-          ///setting driver offline
-          Provider.of<AppData>(context, listen: false).clearDriverOnline();
-          LiveLocationUpdates.liveLocationDispose(context);
+
+          ///setting driver state OFFLINE in DB
+          await driversRef
+              .child(Provider.of<AppData>(context, listen: false)
+                  .currentDriverInfo
+                  .id!)
+              .child("driverState")
+              .set("offline");
+          await LiveLocationUpdates.liveLocationDispose(context);
           ErrorSnackBars.showFloatingSnackBar(
               context: context,
               defaultSize: defaultSize,

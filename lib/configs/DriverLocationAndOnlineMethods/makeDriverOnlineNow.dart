@@ -12,7 +12,7 @@ class MakeDriverOnlineNow {
   static Future<void> makeDriverOnlineNow(BuildContext context) async {
     ///firebase reference for driver's state
     final DatabaseReference driverStateRef = driversRef
-        .child(Provider.of<AppData>(context, listen: false).currentUserInfo.id!)
+        .child(Provider.of<AppData>(context, listen: false).currentDriverInfo.id!)
         .child("driverState");
 
     ///getting current position
@@ -21,7 +21,7 @@ class MakeDriverOnlineNow {
     ///initializing live data location and setting location in rdb
     await Geofire.initialize("availableDrivers");
     await Geofire.setLocation(
-      Provider.of<AppData>(context, listen: false).currentUserInfo.id!,
+      Provider.of<AppData>(context, listen: false).currentDriverInfo.id!,
       currentPosition.latitude,
       currentPosition.longitude,
     );
@@ -35,7 +35,7 @@ class MakeDriverOnlineNow {
     ///updating latLng in provider
     Provider.of<AppData>(context, listen: false).updateLatLng(latLng);
 
-    ///updating animate checker in provider AFTER getting latLng
-    Provider.of<AppData>(context, listen: false).animateGoogleCamera();
+    ///making driver online
+    Provider.of<AppData>(context, listen: false).updateDriverOnline();
   }
 }

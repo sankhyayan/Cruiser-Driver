@@ -27,7 +27,7 @@ class ResetData {
     Provider.of<AppData>(context, listen: false).updateResponse("");
 
     ///resetting animateMap
-    Provider.of<AppData>(context, listen: false).clearAnimateMap();
+    Provider.of<AppData>(context, listen: false).clearDriverOnline();
 
     ///resetting directionDetails
     Provider.of<AppData>(context, listen: false).updateDirectionDetails(

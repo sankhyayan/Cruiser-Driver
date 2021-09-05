@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:cruiser_driver/allWidgets/progressDialog.dart';
+import 'package:cruiser_driver/uiMessageWidgets/progressDialog.dart';
 import 'package:cruiser_driver/configs/locationRequests/assistantMethods.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
 import 'package:cruiser_driver/models/directionDetails.dart';
@@ -29,6 +29,7 @@ class PlaceDirection {
 
     ///progress dialog bar
     showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) =>
           ProgressDialog(defaultSize: defaultSize, message: "Please wait..."),
@@ -46,7 +47,7 @@ class PlaceDirection {
     ///declaring poly points
     PolylinePoints _polylinePoints = PolylinePoints();
 
-    ///decoding encoded path and getting list of latlng
+    ///decoding encoded path and getting list of latLng
     List<PointLatLng> _decodePolylinePointsResult =
         _polylinePoints.decodePolyline(_directionDetails.encodedPoints!);
 

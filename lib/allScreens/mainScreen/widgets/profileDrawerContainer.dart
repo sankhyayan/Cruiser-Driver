@@ -39,7 +39,7 @@ class ProfileDrawerContainer extends StatelessWidget {
                     children: [
                       Text(
                         Provider.of<AppData>(context,listen: false)
-                            .currentUserInfo
+                            .currentDriverInfo
                             .name!,
                         style: TextStyle(
                             fontSize: defaultSize * 1.7,

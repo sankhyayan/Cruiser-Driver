@@ -1,7 +1,9 @@
-import 'package:cruiser_driver/SnackBars/errorSnackBars.dart';
+
 import 'package:cruiser_driver/allScreens/newRideScreen/rideAcceptedScreen.dart';
+import 'package:cruiser_driver/configs/DriverLocationAndOnlineMethods/getLiveLocationUpdates.dart';
 import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
 import 'package:cruiser_driver/main.dart';
+import 'package:cruiser_driver/uiMessageWidgets/errorSnackBars.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,19 +12,21 @@ import 'package:provider/provider.dart';
 class CheckDriverAvailability {
   static Future<void> checkAvailability(
       BuildContext context, double defaultSize) async {
-    String newRideId = "";
+    String driverState = "";
 
     ///firebase reference for driver's state
     final DatabaseReference driverStateRef = driversRef
-        .child(Provider.of<AppData>(context, listen: false).currentUserInfo.id!)
+        .child(
+            Provider.of<AppData>(context, listen: false).currentDriverInfo.id!)
         .child("driverState");
-    await driverStateRef.once().then((DataSnapshot dataSnapshot) {
-      if (dataSnapshot.value != null) {
-        newRideId = dataSnapshot.value.toString();
+    await driverStateRef.once().then((DataSnapshot dataSnapshot) async {
+      if (await dataSnapshot.value != null) {
+        driverState = dataSnapshot.value.toString();
       }
 
       ///if no such id exists[error handler]
       else {
+        Navigator.pop(context);
         ErrorSnackBars.showFloatingSnackBar(
             context: context,
             defaultSize: defaultSize,
@@ -30,23 +34,21 @@ class CheckDriverAvailability {
       }
 
       ///ride accepted by driver
-      if (newRideId ==
+      if (driverState ==
           Provider.of<AppData>(context, listen: false)
               .newRideRequestDetails
               .ride_request_id) {
-        driverStateRef
+        await LiveLocationUpdates.liveLocationDispose(context);
+        ///making driver status accepted
+        await driverStateRef
             .set("accepted"); //setting offline/online status to accepted.
-        Provider.of<AppData>(context, listen: false).clearNewRideAnimateMap();
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => NewRideAcceptedScreen(),
-          ),
-        );
+        Provider.of<AppData>(context,listen: false).clearRideDuration();
+        Navigator.popAndPushNamed(context, NewRideAcceptedScreen.idScreen);
       }
 
       ///ride cancelled by user
-      else if (newRideId == "cancelled") {
+      else if (driverState == "cancelled") {
+        Navigator.pop(context);
         ErrorSnackBars.showFloatingSnackBar(
             context: context,
             defaultSize: defaultSize,
@@ -54,7 +56,8 @@ class CheckDriverAvailability {
       }
 
       ///other drivers have already accepted this ride
-      else if (newRideId == "timeout") {
+      else if (driverState == "timeout") {
+        Navigator.pop(context);
         ErrorSnackBars.showFloatingSnackBar(
             context: context,
             defaultSize: defaultSize,
@@ -63,6 +66,7 @@ class CheckDriverAvailability {
 
       ///if no such id exists[error handler]
       else {
+        Navigator.pop(context);
         ErrorSnackBars.showFloatingSnackBar(
             context: context,
             defaultSize: defaultSize,

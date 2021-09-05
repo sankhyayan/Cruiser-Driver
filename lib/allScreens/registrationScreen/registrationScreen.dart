@@ -1,14 +1,14 @@
 import 'package:cruiser_driver/allScreens/carInfoScreen/carInfoScreen.dart';
-import 'package:cruiser_driver/configs/providers/appDataProvider.dart';
 import 'package:cruiser_driver/database/authMethods/CurrentUser.dart';
+import 'package:cruiser_driver/uiMessageWidgets/errorSnackBars.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cruiser_driver/SnackBars/errorSnackBars.dart';
+
 import 'package:cruiser_driver/allScreens/loginScreen/loginScreen.dart';
-import 'package:cruiser_driver/allWidgets/progressDialog.dart';
+import 'package:cruiser_driver/uiMessageWidgets/progressDialog.dart';
 import 'package:cruiser_driver/configs/sizeConfig.dart';
 import 'package:cruiser_driver/database/authMethods/register.dart';
-import 'package:cruiser_driver/models/userDataToMap.dart';
+import 'package:cruiser_driver/models/driverDataToMap.dart';
 
 
 import '../../main.dart';
@@ -173,6 +173,7 @@ class RegistrationScreen extends StatelessWidget {
                       else {
                         ///progress dialog indicator
                         showDialog(
+                          barrierDismissible: false,
                             context: context,
                             builder: (context) {
                               return ProgressDialog(
@@ -187,8 +188,8 @@ class RegistrationScreen extends StatelessWidget {
                         );
                         if (createdUser != null) {
                           Map<String, dynamic> createdUserMap =
-                              UserDataToMap.toMap(
-                            UserDataToMap(
+                              DriverDataToMap.toMap(
+                            DriverDataToMap(
                               name: _nameTextEditingController.text.trim(),
                               email: _emailTextEditingController.text.trim(),
                               phone: _phoneTextEditingController.text.trim(),

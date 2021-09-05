@@ -8,7 +8,7 @@ class SaveDriverCarInfo {
       String carModel, String carNumber) async {
     ///getting new registered user Id
     String userId =
-        Provider.of<AppData>(context, listen: false).currentUserInfo.id!;
+        Provider.of<AppData>(context, listen: false).currentDriverInfo.id!;
 
     ///mapping car info details
     Map carInfoMap = {

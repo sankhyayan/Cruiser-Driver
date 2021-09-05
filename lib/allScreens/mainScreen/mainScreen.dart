@@ -39,14 +39,6 @@ class _MainScreenState extends State<MainScreen>
     LocalNotificationService.initialize(context);
     PushNotificationService.setupInteractedMessage(context);
   }
-
-  ///dispose method
-  @override
-  void dispose() {
-    super.dispose();
-    LiveLocationUpdates.liveLocationDispose(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
